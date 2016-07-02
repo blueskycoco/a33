@@ -132,7 +132,7 @@ void (* const g_pfnVectors[])(void) =
 	IntDefaultHandler, //	USART3_IRQHandler
 	IntDefaultHandler, //	EXTI15_10_IRQHandler
 	IntDefaultHandler, //	RTC_Alarm_IRQHandler
-	USBWakeUp_IRQHandler, //	USBWakeUp_IRQHandler
+	IntDefaultHandler, //	USBWakeUp_IRQHandler
 	0, //	0
 	0, //	0
 	0, //	0

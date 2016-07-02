@@ -26,30 +26,17 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f3xx_hal.h"
+//#include "stm32f3xx_hal.h"
 #include "main.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
+#define USB_DISCONNECT_PORT                 GPIOD  
+#define USB_DISCONNECT_PIN                  GPIO_PIN_2
+
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 PCD_HandleTypeDef hpcd;
-void gpd2(int on)
-{
-	GPIO_InitTypeDef GPIO_InitStruct;
-	__GPIOD_CLK_ENABLE();
-
-	GPIO_InitStruct.Pin = GPIO_PIN_2;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
-	HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-	if(on)
-		HAL_GPIO_WritePin(GPIOD,GPIO_PIN_2,GPIO_PIN_RESET);
-	else
-		HAL_GPIO_WritePin(GPIOD,GPIO_PIN_2,GPIO_PIN_SET);
-}
-
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -64,33 +51,32 @@ void gpd2(int on)
   */
 void HAL_PCD_MspInit(PCD_HandleTypeDef *hpcd)
 {
-  GPIO_InitTypeDef  GPIO_InitStruct;
-  
-  /* Enable the GPIOA clock */
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  
-  /* Configure USB DM/DP pin. This is optional, and maintained only for user guidance.
-     For the STM32L products there is no need to configure the PA12/PA11 pins couple 
-     as Alternate Function */
+	GPIO_InitTypeDef  GPIO_InitStruct;
+
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+
+	__HAL_RCC_GPIOD_CLK_ENABLE();
+
 	GPIO_InitStruct.Pin = (GPIO_PIN_11 | GPIO_PIN_12);
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	//GPIO_InitStruct.Alternate=GPIO_AF14_USB;
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  
-  /* Enable USB Clock */
-  __HAL_RCC_USB_CLK_ENABLE();
-  
-  /* Enable SYSCFG Clock */
-  __HAL_RCC_SYSCFG_CLK_ENABLE();
-  //__HAL_REMAPINTERRUPT_USB_ENABLE();
-  /* Set USB Interrupt priority */
-  HAL_NVIC_SetPriority(USB_LP_CAN_RX0_IRQn, 0x07, 0);
-  
-  /* Enable USB Interrupt */
-  HAL_NVIC_EnableIRQ(USB_LP_CAN_RX0_IRQn);
+	GPIO_InitStruct.Pin = USB_DISCONNECT_PIN;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(USB_DISCONNECT_PORT, &GPIO_InitStruct);
+
+	__HAL_RCC_USB_CLK_ENABLE();
+
+	__HAL_RCC_SYSCFG_CLK_ENABLE();
+	//__HAL_REMAPINTERRUPT_USB_ENABLE();
+
+	HAL_NVIC_SetPriority(USB_LP_CAN_RX0_IRQn, 0x05, 0);
+
+	HAL_NVIC_EnableIRQ(USB_LP_CAN_RX0_IRQn);
 }
 
 /**
@@ -100,17 +86,14 @@ void HAL_PCD_MspInit(PCD_HandleTypeDef *hpcd)
   */
 void HAL_PCD_MspDeInit(PCD_HandleTypeDef *hpcd)
 {
-  /* Disable USB FS Clock */
   __HAL_RCC_USB_CLK_DISABLE();
-  
-  /* Disable SYSCFG Clock */
+ 
   __HAL_RCC_SYSCFG_CLK_DISABLE();
 }
 
 /*******************************************************************************
                        LL Driver Callbacks (PCD -> USB Device Library)
 *******************************************************************************/
-
 
 /**
   * @brief  SetupStage callback.
@@ -152,7 +135,6 @@ void HAL_PCD_DataInStageCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
 void HAL_PCD_SOFCallback(PCD_HandleTypeDef *hpcd)
 {
   USBD_LL_SOF(hpcd->pData);
-  printf("HAL_PCD_SOFCallback ");
 }
 
 /**
@@ -175,8 +157,6 @@ void HAL_PCD_ResetCallback(PCD_HandleTypeDef *hpcd)
   */
 void HAL_PCD_SuspendCallback(PCD_HandleTypeDef *hpcd)
 {
-  USBD_LL_Suspend(hpcd->pData);
-  //printf("HAL_PCD_SuspendCallback ");
 }
 
 /**
@@ -186,8 +166,6 @@ void HAL_PCD_SuspendCallback(PCD_HandleTypeDef *hpcd)
   */
 void HAL_PCD_ResumeCallback(PCD_HandleTypeDef *hpcd)
 {
-  USBD_LL_Resume(hpcd->pData);
-  //printf("HAL_PCD_ResumeCallback ");
 }
 
 /**
@@ -220,8 +198,6 @@ void HAL_PCD_ISOINIncompleteCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
 void HAL_PCD_ConnectCallback(PCD_HandleTypeDef *hpcd)
 {
   USBD_LL_DevConnected(hpcd->pData);
-  
-	printf("in HAL_PCD_ConnectCallback\n");
 }
 
 /**
@@ -232,7 +208,6 @@ void HAL_PCD_ConnectCallback(PCD_HandleTypeDef *hpcd)
 void HAL_PCD_DisconnectCallback(PCD_HandleTypeDef *hpcd)
 {
   USBD_LL_DevDisconnected(hpcd->pData);
-  printf("in HAL_PCD_DisconnectCallback\n");
 }
 
 /*******************************************************************************
@@ -247,22 +222,18 @@ void HAL_PCD_DisconnectCallback(PCD_HandleTypeDef *hpcd)
   */
 USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 {
-  /* Set LL Driver parameters */
   hpcd.Instance = USB;
   hpcd.Init.dev_endpoints = 8;
   hpcd.Init.ep0_mps = PCD_EP0MPS_64;
   hpcd.Init.phy_itface = PCD_PHY_EMBEDDED;
   hpcd.Init.speed = PCD_SPEED_FULL;
-  hpcd.Init.low_power_enable = 0;
-  /* Link The driver to the stack */
   hpcd.pData = pdev;
   pdev->pData = &hpcd;
-  /* Initialize LL Driver */
   HAL_PCD_Init(pdev->pData);
   
-  HAL_PCDEx_PMAConfig(pdev->pData , 0x00 , PCD_SNG_BUF, 0x40);
-  HAL_PCDEx_PMAConfig(pdev->pData , 0x80 , PCD_SNG_BUF, 0x80);
-  HAL_PCDEx_PMAConfig(pdev->pData , CDC_IN_EP , PCD_SNG_BUF, 0xC0);  
+  HAL_PCDEx_PMAConfig(pdev->pData , 0x00 , 		 PCD_SNG_BUF, 0x40);
+  HAL_PCDEx_PMAConfig(pdev->pData , 0x80 , 		 PCD_SNG_BUF, 0x80);
+  HAL_PCDEx_PMAConfig(pdev->pData , CDC_IN_EP ,  PCD_SNG_BUF, 0xC0);  
   HAL_PCDEx_PMAConfig(pdev->pData , CDC_OUT_EP , PCD_SNG_BUF, 0x110);
   HAL_PCDEx_PMAConfig(pdev->pData , CDC_CMD_EP , PCD_SNG_BUF, 0x100); 
   
@@ -500,18 +471,12 @@ void HAL_PCDEx_SetConnectionState(PCD_HandleTypeDef *hpcd, uint8_t state)
 {
   if (state == 1)
   {
-    /*  DP Pull-Down is Internal */
-    //__HAL_SYSCFG_USBPULLUP_ENABLE();
-    //printf("HAL_PCDEx_SetConnectionState 1\r\n");
-    gpd2(1);
+    HAL_GPIO_WritePin(USB_DISCONNECT_PORT, USB_DISCONNECT_PIN, GPIO_PIN_RESET);
   }
   else
   {
-    /*  DP Pull-Down is Internal */
-    //__HAL_SYSCFG_USBPULLUP_DISABLE();
-    //printf("HAL_PCDEx_SetConnectionState 0\r\n");
-    gpd2(0);
-  }
+    HAL_GPIO_WritePin(USB_DISCONNECT_PORT, USB_DISCONNECT_PIN, GPIO_PIN_SET);
+  }  
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

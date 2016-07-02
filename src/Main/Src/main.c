@@ -117,8 +117,8 @@ int main(void)
   /* Start Device Process */
   USBD_Start(&USBD_Device);
   printf("USB Init done\r\n");
-  //while(1)
-  //	HAL_Delay(1000);
+  while(1);
+ 	HAL_Delay(1000);
   while (1)
   {
   	USBD_CDC_SetTxBuffer(&USBD_Device, (uint8_t*)&UserTxBuffer[0], 1024);
