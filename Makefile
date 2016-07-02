@@ -98,6 +98,7 @@ ${COMPILER}/net.axf: ${COMPILER}/usbd_cdc.o
 ${COMPILER}/net.axf: ${COMPILER}/usbd_core.o
 ${COMPILER}/net.axf: ${COMPILER}/usbd_ctlreq.o
 ${COMPILER}/net.axf: ${COMPILER}/usbd_ioreq.o
+${COMPILER}/net.axf: ${COMPILER}/usart.o
 ${COMPILER}/net.axf: stm32f3xx_flash.ld
 SCATTERgcc_net=stm32f3xx_flash.ld
 ENTRY_net=ResetISR
