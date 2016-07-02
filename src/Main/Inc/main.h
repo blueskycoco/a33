@@ -56,6 +56,8 @@
 #include "usbd_desc.h"
 #include "usbd_cdc.h" 
 #include "usbd_cdc_interface.h"
+#include "usbd_hid.h" 
+
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/

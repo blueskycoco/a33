@@ -57,21 +57,6 @@ __IO uint32_t remotewakeupon=0;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 static void SystemClockConfig_STOP(void);
-void gpd2(int on)
-{
-	GPIO_InitTypeDef GPIO_InitStruct;
-	__GPIOD_CLK_ENABLE();
-
-	GPIO_InitStruct.Pin = GPIO_PIN_2;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
-	HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-	if(on)
-		HAL_GPIO_WritePin(GPIOD,GPIO_PIN_2,GPIO_PIN_RESET);
-	else
-		HAL_GPIO_WritePin(GPIOD,GPIO_PIN_2,GPIO_PIN_SET);
-}
 
 /*******************************************************************************
                        PCD BSP Routines
@@ -551,10 +536,6 @@ void USBD_static_free(void *p)
   */
 void HAL_PCDEx_SetConnectionState(PCD_HandleTypeDef *hpcd, uint8_t state)
 { 
-	if(state)
-		gpd2(1);
-	else
-		gpd2(0);
 }
 
 /**

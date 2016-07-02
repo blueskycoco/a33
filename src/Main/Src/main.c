@@ -111,14 +111,18 @@ int main(void)
   //BSP_PB_Init(BUTTON_USER, BUTTON_MODE_EXTI);
   
   /* Init Device Library */
-  USBD_Init(&USBD_Device, &VCP_Desc, 0);  
-  USBD_RegisterClass(&USBD_Device, USBD_CDC_CLASS);
-  USBD_CDC_RegisterInterface(&USBD_Device, &USBD_CDC_fops);
+  //USBD_Init(&USBD_Device, &VCP_Desc, 0);  
+  //USBD_RegisterClass(&USBD_Device, USBD_CDC_CLASS);
+  //USBD_CDC_RegisterInterface(&USBD_Device, &USBD_CDC_fops);
+  USBD_Init(&USBD_Device, &HID_Desc, 0);
+  
+  /* Register the HID class */
+  USBD_RegisterClass(&USBD_Device, &USBD_HID);
   /* Start Device Process */
   USBD_Start(&USBD_Device);
   printf("USB Init done\r\n");
-  //while(1)
-  //	HAL_Delay(1000);
+  while(1)
+  	HAL_Delay(1000);
   while (1)
   {
   	USBD_CDC_SetTxBuffer(&USBD_Device, (uint8_t*)&UserTxBuffer[0], 1024);
