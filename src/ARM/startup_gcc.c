@@ -49,7 +49,7 @@ extern void PendSV_Handler(void);
 extern void SysTick_Handler(void);
 extern void USBWakeUp_IRQHandler(void);
 extern void USB_LP_CAN_RX0_IRQHandler(void);
-extern void USART1_IRQHandler(void);
+extern void USARTx_IRQHandler(void);
 //*****************************************************************************
 //
 // The entry point for the application.
@@ -127,8 +127,8 @@ void (* const g_pfnVectors[])(void) =
 	IntDefaultHandler, //	I2C2_ER_IRQHandler
 	0, //	0
 	IntDefaultHandler, //	SPI2_IRQHandler
-	USART1_IRQHandler, //	USART1_IRQHandler
-	IntDefaultHandler, //	USART2_IRQHandler
+	IntDefaultHandler, //	USART1_IRQHandler
+	USARTx_IRQHandler, //	USART2_IRQHandler
 	IntDefaultHandler, //	USART3_IRQHandler
 	IntDefaultHandler, //	EXTI15_10_IRQHandler
 	IntDefaultHandler, //	RTC_Alarm_IRQHandler

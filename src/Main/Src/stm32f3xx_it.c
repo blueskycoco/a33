@@ -174,6 +174,7 @@ void USB_LP_CAN_RX0_IRQHandler(void)
 void USB_LP_IRQHandler(void)
 #endif
 {
+	//printf("enter USB_LP_CAN_RX0_IRQHandler\r\n");
   HAL_PCD_IRQHandler(&hpcd);
 }
 
@@ -188,6 +189,7 @@ void USBWakeUp_IRQHandler(void)
 void USBWakeUp_RMP_IRQHandler(void)
 #endif
 {
+	//printf("enter USBWakeUp_IRQHandler\r\n");
   __HAL_USB_WAKEUP_EXTI_CLEAR_FLAG();
 }
 

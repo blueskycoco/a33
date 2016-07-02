@@ -103,7 +103,7 @@ int main(void)
    UartHandle.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT; 
    HAL_UART_DeInit(&UartHandle);
    HAL_UART_Init(&UartHandle);
-	printf("STM32F302R8T6 Init\n");
+	printf("STM32F302R8T6 Init\r\n");
   /* Configure LED2 */
   //BSP_LED_Init(LED2);
 
@@ -116,7 +116,9 @@ int main(void)
   USBD_CDC_RegisterInterface(&USBD_Device, &USBD_CDC_fops);
   /* Start Device Process */
   USBD_Start(&USBD_Device);
-  
+  printf("USB Init done\r\n");
+  //while(1)
+  //	HAL_Delay(1000);
   while (1)
   {
   	USBD_CDC_SetTxBuffer(&USBD_Device, (uint8_t*)&UserTxBuffer[0], 1024);
@@ -124,6 +126,8 @@ int main(void)
 	{
 		printf("USB Send done.\n");
 	}
+	else
+		printf("USB Send failed. \n");
 	HAL_Delay(100);  
   }
 }
