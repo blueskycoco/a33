@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <time.h> 
 #define MY_VID 0x0483
-#define MY_PID 0x5740
+#define MY_PID 0x5710
 
 // Device configuration and interface id.
 #define MY_CONFIG 1
@@ -33,7 +33,8 @@ usb_dev_handle *open_dev()
     {
         for (dev = bus->devices; dev; dev = dev->next)
         {
-			printf("filename %s\n",dev->filename);
+			printf("filename %s vid %d, pid %d,intf %d\n",dev->filename,
+				dev->descriptor.idVendor,dev->descriptor.idProduct,intf);
             if (dev->descriptor.idVendor == MY_VID
                     && dev->descriptor.idProduct == MY_PID
 					&& dev->config->interface->altsetting->bInterfaceNumber==intf)
@@ -56,7 +57,7 @@ void TcharToChar (const TCHAR * tchar, char ** _char)
 	WideCharToMultiByte(CP_ACP, 0, (const WCHAR *)tchar, -1, *_char, iLength, NULL, NULL);   
 	//printf("%s\n",*_char);
 }  
-#define W_OP 1
+#define W_OP 0
 #ifdef TEST_ASYNC
 /*
 * Read/Write using async transfer functions.

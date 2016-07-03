@@ -174,7 +174,7 @@ void USB_LP_CAN_RX0_IRQHandler(void)
 void USB_LP_IRQHandler(void)
 #endif
 {
-	printf("enter USB_LP_CAN_RX0_IRQHandler ");
+	//printf("enter USB_LP_CAN_RX0_IRQHandler\n");
   HAL_PCD_IRQHandler(&hpcd);
 }
 

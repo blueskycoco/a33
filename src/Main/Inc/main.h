@@ -53,8 +53,10 @@
 #include "stm32f3xx_hal.h"
 #include "stm32f3xx_nucleo.h"
 #include "usbd_core.h"
-#include "usbd_desc.h"
-#include "usbd_cdc.h" 
+//#include "usbd_desc_cdc.h"
+#include "usbd_desc_hid.h"
+//#include "usbd_cdc.h"
+#include "usbd_hid.h"
 #include "usbd_cdc_interface.h"
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/

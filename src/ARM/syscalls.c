@@ -164,8 +164,8 @@ void SWO_PrintString( const char *s )
 int _write(int file, char *ptr, int len) {
   int todo;
   for (todo = 0; todo < len; todo++) {
-  	if(*ptr=='\n')
-		*ptr='\r';
+  	//if(*ptr=='\n')
+	//	*ptr='\r';
    uart_send(*ptr++ & (unsigned short)0x01ff);
    //SWO_PrintChar(*ptr++);
   }

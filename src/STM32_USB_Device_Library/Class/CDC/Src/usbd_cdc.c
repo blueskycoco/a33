@@ -60,7 +60,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "USBD_CDC.h"
-#include "usbd_desc.h"
+#include "usbd_desc_cdc.h"
 #include "usbd_ctlreq.h"
 
 
@@ -518,12 +518,13 @@ static uint8_t  USBD_CDC_Init (USBD_HandleTypeDef *pdev,
   
   if(pdev->pClassData == NULL)
   {
+  	printf("pClassData is NULL ");
     ret = 1; 
   }
   else
   {
     hcdc = (USBD_CDC_HandleTypeDef*) pdev->pClassData;
-    
+    printf("pClassData is not NULL ");
     /* Init  physical Interface components */
     ((USBD_CDC_ItfTypeDef *)pdev->pUserData)->Init();
     

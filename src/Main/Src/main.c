@@ -88,6 +88,7 @@ int main(void)
        - Set NVIC Group Priority to 4
        - Low Level Initialization
      */
+     int i=0;
   HAL_Init();
   
   /* Configure the system clock to 72 Mhz */
@@ -111,23 +112,34 @@ int main(void)
   //BSP_PB_Init(BUTTON_USER, BUTTON_MODE_EXTI);
   
   /* Init Device Library */
+  #if 0
   USBD_Init(&USBD_Device, &VCP_Desc, 0);  
   USBD_RegisterClass(&USBD_Device, USBD_CDC_CLASS);
   USBD_CDC_RegisterInterface(&USBD_Device, &USBD_CDC_fops);
   /* Start Device Process */
   USBD_Start(&USBD_Device);
+  #else
+  USBD_Init(&USBD_Device, &HID_Desc, 0);  
+  /* Register the HID class */
+  USBD_RegisterClass(&USBD_Device, &USBD_HID);  
+  /* Start Device Process */
+  USBD_Start(&USBD_Device);
+  #endif
   printf("USB Init done\r\n");
-  while(1);
- 	HAL_Delay(1000);
   while (1)
   {
-  	USBD_CDC_SetTxBuffer(&USBD_Device, (uint8_t*)&UserTxBuffer[0], 1024);
-	if(USBD_CDC_TransmitPacket(&USBD_Device) == USBD_OK)
-	{
-		printf("USB Send done.\n");
-	}
-	else
-		printf("USB Send failed. \n");
+  	//USBD_CDC_SetTxBuffer(&USBD_Device, (uint8_t*)&UserTxBuffer[0], 1024);
+  	USBD_HID_SendReport(&USBD_Device,0x81,UserTxBuffer,1024);
+	/*
+	USBD_HID_SendReport(&USBD_Device,0x82,UserTxBuffer,1024);
+	
+  	USBD_HID_SendReport(&USBD_Device,0x83,UserTxBuffer,1024);
+	USBD_HID_SendReport(&USBD_Device,0x84,UserTxBuffer,1024);
+	USBD_HID_SendReport(&USBD_Device,0x85,UserTxBuffer,1024);
+	USBD_HID_SendReport(&USBD_Device,0x86,UserTxBuffer,1024);
+	USBD_HID_SendReport(&USBD_Device,0x87,UserTxBuffer,1024);*/
+	i++;
+  	memset(UserTxBuffer,0x30+i,1024);
 	HAL_Delay(100);  
   }
 }

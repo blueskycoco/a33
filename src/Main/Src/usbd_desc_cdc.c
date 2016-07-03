@@ -27,7 +27,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_core.h"
-#include "usbd_desc.h"
+#include "usbd_desc_cdc.h"
 #include "usbd_conf.h"
 
 /* Private typedef -----------------------------------------------------------*/

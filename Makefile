@@ -38,11 +38,13 @@ include ${ROOT}/makedefs
 IPATH=./src/CMSIS/Include
 IPATH+=./src/Main/inc
 IPATH+=./src/STM32_USB_Device_Library/Class/CDC/Inc
+IPATH+=./src/STM32_USB_Device_Library/Class/HID/Inc
 IPATH+=./src/STM32_USB_Device_Library/Core/Inc
 IPATH+=./src/STM32F3xx_HAL_Driver/Inc
 IPATH+=./src/cmsis
 VPATH=./src/STM32F3xx_HAL_Driver/Src
 VPATH+=./src/STM32_USB_Device_Library/Class/CDC/Src
+VPATH+=./src/STM32_USB_Device_Library/Class/HID/Src
 VPATH+=./src/cmsis
 VPATH+=./src/Main/src
 VPATH+=./src/STM32_USB_Device_Library/Core/Src
@@ -76,7 +78,8 @@ ${COMPILER}/net.axf: ${COMPILER}/syscalls.o
 ${COMPILER}/net.axf: ${COMPILER}/main.o
 ${COMPILER}/net.axf: ${COMPILER}/stm32f3xx_it.o
 ${COMPILER}/net.axf: ${COMPILER}/usbd_conf.o
-${COMPILER}/net.axf: ${COMPILER}/usbd_desc.o
+#${COMPILER}/net.axf: ${COMPILER}/usbd_desc_cdc.o
+${COMPILER}/net.axf: ${COMPILER}/usbd_desc_hid.o
 ${COMPILER}/net.axf: ${COMPILER}/usbd_cdc_interface.o
 ${COMPILER}/net.axf: ${COMPILER}/stm32f3xx_nucleo.o
 ${COMPILER}/net.axf: ${COMPILER}/system_stm32f3xx.o
@@ -94,7 +97,8 @@ ${COMPILER}/net.axf: ${COMPILER}/stm32f3xx_hal_uart_ex.o
 ${COMPILER}/net.axf: ${COMPILER}/stm32f3xx_hal_flash.o
 ${COMPILER}/net.axf: ${COMPILER}/stm32f3xx_hal_tim_ex.o
 ${COMPILER}/net.axf: ${COMPILER}/stm32f3xx_hal_tim.o
-${COMPILER}/net.axf: ${COMPILER}/usbd_cdc.o
+#${COMPILER}/net.axf: ${COMPILER}/usbd_cdc.o
+${COMPILER}/net.axf: ${COMPILER}/usbd_hid.o
 ${COMPILER}/net.axf: ${COMPILER}/usbd_core.o
 ${COMPILER}/net.axf: ${COMPILER}/usbd_ctlreq.o
 ${COMPILER}/net.axf: ${COMPILER}/usbd_ioreq.o
