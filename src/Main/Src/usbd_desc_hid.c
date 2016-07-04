@@ -56,9 +56,9 @@
 #define USBD_PID                      0x5710
 #define USBD_LANGID_STRING            0x409
 #define USBD_MANUFACTURER_STRING      "STMicroelectronics"
-#define USBD_PRODUCT_FS_STRING        "HID Joystick in FS Mode"
-#define USBD_CONFIGURATION_FS_STRING  "HID Config"
-#define USBD_INTERFACE_FS_STRING      "HID Interface"
+#define USBD_PRODUCT_FS_STRING        "Bulk in FS Mode"
+#define USBD_CONFIGURATION_FS_STRING  "STM32F302R8T6 USB"
+#define USBD_INTERFACE_FS_STRING      "Bulk Interface"
 
 /* Private macro -------------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
