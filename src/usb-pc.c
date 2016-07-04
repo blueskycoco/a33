@@ -10,9 +10,9 @@
 //#define TEST_ASYNC
 
 // Device endpoint(s)
-#define EP_IN 0x81
-#define EP_OUT 0x01
-int intf=1;
+#define EP_IN 0x83
+#define EP_OUT 0x03
+int intf=2;
 // Device of bytes to transfer.
 #define BUF_SIZE 16384
 

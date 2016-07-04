@@ -134,6 +134,137 @@ USBD_ClassTypeDef  USBD_HID =
   USBD_HID_GetDeviceQualifierDesc,
 };
 #if 1
+#if 1
+#define USBShort(ui16Value)     (ui16Value & 0xff), (ui16Value >> 8)
+#define USB_EP_DESC_OUT                 0x00
+#define USB_EP_DESC_IN                  0x80
+#define USBEPToIndex(x)         ((x) >> 4)
+#define USB_EP_ATTR_BULK                0x02
+#define DATA_IN_EP_MAX_SIZE     64
+#define DATA_OUT_EP_MAX_SIZE    64
+
+__ALIGN_BEGIN uint8_t USBD_HID_CfgDesc[78] __ALIGN_END =
+{	
+	//
+	// Configuration descriptor header.
+	//
+	9,                          // Size of the configuration descriptor.
+	USB_DESC_TYPE_CONFIGURATION,    // Type of this descriptor.
+	USBShort(78),               // The total size of this full structure.
+	3,                          // The number of interfaces in this
+								// configuration.
+	1,                          // The unique value for this configuration.
+	5,                          // The string identifier that describes this
+								// configuration.
+	0xC0,     // Bus Powered, Self Powered, remote wake up.
+	250,                        // The maximum power in 2mA increments.
+	//
+    // Vendor-specific Interface Descriptor.
+    //
+    9,                              // Size of the interface descriptor.
+    4,            // Type of this descriptor.
+    0,                              // The index for this interface.
+    0,                              // The alternate setting for this
+                                    // interface.
+    2,                              // The number of endpoints used by this
+                                    // interface.
+    0xff,        // The interface class
+    0,                              // The interface sub-class.
+    0,                              // The interface protocol for the sub-class
+                                    // specified above.
+    4,                              // The string index for this interface.
+
+    //
+    // Endpoint Descriptor
+    //
+    7,                              // The size of the endpoint descriptor.
+    USB_DESC_TYPE_ENDPOINT,             // Descriptor type is an endpoint.
+    USB_EP_DESC_IN | 0x01,
+    USB_EP_ATTR_BULK,               // Endpoint is a bulk endpoint.
+    USBShort(DATA_IN_EP_MAX_SIZE),  // The maximum packet size.
+    0,                              // The polling interval for this endpoint.
+	//
+	// Endpoint Descriptor
+	//
+	7,								 // The size of the endpoint descriptor.
+	USB_DESC_TYPE_ENDPOINT, 			 // Descriptor type is an endpoint.
+	USB_EP_DESC_OUT | 0x01,
+	USB_EP_ATTR_BULK,				 // Endpoint is a bulk endpoint.
+	USBShort(DATA_OUT_EP_MAX_SIZE),  // The maximum packet size.
+	0,								 // The polling interval for this endpoint.    
+	//
+	// Vendor-specific Interface Descriptor.
+	//
+	9,								// Size of the interface descriptor.
+	4,			  // Type of this descriptor.
+	1,								// The index for this interface.
+	0,								// The alternate setting for this
+									// interface.
+	2,								// The number of endpoints used by this
+									// interface.
+	0xff,		 // The interface class
+	0,								// The interface sub-class.
+	0,								// The interface protocol for the sub-class
+									// specified above.
+	4,								// The string index for this interface.
+    
+    //
+    // Endpoint Descriptor
+    //
+    7,                              // The size of the endpoint descriptor.
+    USB_DESC_TYPE_ENDPOINT,             // Descriptor type is an endpoint.
+    USB_EP_DESC_IN | 0x02,
+    USB_EP_ATTR_BULK,               // Endpoint is a bulk endpoint.
+    USBShort(DATA_IN_EP_MAX_SIZE),  // The maximum packet size.
+    0,                              // The polling interval for this endpoint.
+
+    //
+    // Endpoint Descriptor
+    //
+    7,                               // The size of the endpoint descriptor.
+    USB_DESC_TYPE_ENDPOINT,              // Descriptor type is an endpoint.
+    USB_EP_DESC_OUT | 0x02,
+    USB_EP_ATTR_BULK,                // Endpoint is a bulk endpoint.
+    USBShort(DATA_OUT_EP_MAX_SIZE),  // The maximum packet size.
+    0,                               // The polling interval for this endpoint.
+    //
+	// Vendor-specific Interface Descriptor.
+	//
+	9,								// Size of the interface descriptor.
+	4,			  // Type of this descriptor.
+	2,								// The index for this interface.
+	0,								// The alternate setting for this
+									// interface.
+	2,								// The number of endpoints used by this
+									// interface.
+	0xff,		 // The interface class
+	0,								// The interface sub-class.
+	0,								// The interface protocol for the sub-class
+									// specified above.
+	4,								// The string index for this interface.
+    
+    //
+    // Endpoint Descriptor
+    //
+    7,                              // The size of the endpoint descriptor.
+    USB_DESC_TYPE_ENDPOINT,             // Descriptor type is an endpoint.
+    USB_EP_DESC_IN | 0x03,
+    USB_EP_ATTR_BULK,               // Endpoint is a bulk endpoint.
+    USBShort(DATA_IN_EP_MAX_SIZE),  // The maximum packet size.
+    0,                              // The polling interval for this endpoint.
+
+    //
+    // Endpoint Descriptor
+    //
+    7,                               // The size of the endpoint descriptor.
+    USB_DESC_TYPE_ENDPOINT,              // Descriptor type is an endpoint.
+    USB_EP_DESC_OUT | 0x03,
+    USB_EP_ATTR_BULK,                // Endpoint is a bulk endpoint.
+    USBShort(DATA_OUT_EP_MAX_SIZE),  // The maximum packet size.
+    0,                               // The polling interval for this endpoint.
+};
+
+#else
 __ALIGN_BEGIN uint8_t USBD_HID_CfgDesc[144] __ALIGN_END =
 {
   /*Configuration Descriptor*/
@@ -320,6 +451,7 @@ __ALIGN_BEGIN uint8_t USBD_HID_CfgDesc[144] __ALIGN_END =
   HIBYTE(64),
   0x00,  
 } ;
+#endif
 #else
 /* USB HID device Configuration Descriptor */
 __ALIGN_BEGIN static uint8_t USBD_HID_CfgDesc[USB_HID_CONFIG_DESC_SIZ]  __ALIGN_END =
@@ -473,10 +605,35 @@ static uint8_t  USBD_HID_Init (USBD_HandleTypeDef *pdev,
   
   /* Open EP IN */
   USBD_LL_OpenEP(pdev,
-                 HID_EPIN_ADDR,
-                 USBD_EP_TYPE_INTR,
-                 HID_EPIN_SIZE);  
+                 0x81,
+                 USBD_EP_TYPE_BULK,
+                 64);  
+  USBD_LL_OpenEP(pdev,
+                 0x82,
+                 USBD_EP_TYPE_BULK,
+                 64);
   
+  USBD_LL_OpenEP(pdev,
+                 0x83,
+                 USBD_EP_TYPE_BULK,
+                 64);  
+  USBD_LL_OpenEP(pdev,
+                 0x84,
+                 USBD_EP_TYPE_BULK,
+                 64);  
+  USBD_LL_OpenEP(pdev,
+                 0x85,
+                 USBD_EP_TYPE_BULK,
+                 64);  
+  USBD_LL_OpenEP(pdev,
+                 0x86,
+                 USBD_EP_TYPE_BULK,
+                 64);  
+  USBD_LL_OpenEP(pdev,
+                 0x87,
+                 USBD_EP_TYPE_BULK,
+                 64);  
+
   pdev->pClassData = USBD_malloc(sizeof (USBD_HID_HandleTypeDef));
   
   if(pdev->pClassData == NULL)
@@ -608,18 +765,18 @@ uint8_t USBD_HID_SendReport     (USBD_HandleTypeDef  *pdev,
                                  uint8_t *report,
                                  uint16_t len)
 {
-  USBD_HID_HandleTypeDef     *hhid = (USBD_HID_HandleTypeDef*)pdev->pClassData;
+  //USBD_HID_HandleTypeDef     *hhid = (USBD_HID_HandleTypeDef*)pdev->pClassData;
   
   if (pdev->dev_state == USBD_STATE_CONFIGURED )
   {
-    if(hhid->state == HID_IDLE)
-    {
-      hhid->state = HID_BUSY;
+    //if(hhid->state == HID_IDLE)
+    //{
+     // hhid->state = HID_BUSY;
       USBD_LL_Transmit (pdev, 
                         addr,                                      
                         report,
                         len);
-    }
+    //}
   }
   return USBD_OK;
 }
