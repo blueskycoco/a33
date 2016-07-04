@@ -143,15 +143,15 @@ USBD_ClassTypeDef  USBD_HID =
 #define DATA_IN_EP_MAX_SIZE     64
 #define DATA_OUT_EP_MAX_SIZE    64
 
-__ALIGN_BEGIN uint8_t USBD_HID_CfgDesc[78] __ALIGN_END =
+__ALIGN_BEGIN uint8_t USBD_HID_CfgDesc[170] __ALIGN_END =
 {	
 	//
 	// Configuration descriptor header.
 	//
 	9,                          // Size of the configuration descriptor.
 	USB_DESC_TYPE_CONFIGURATION,    // Type of this descriptor.
-	USBShort(78),               // The total size of this full structure.
-	3,                          // The number of interfaces in this
+	USBShort(170),               // The total size of this full structure.
+	7,                          // The number of interfaces in this
 								// configuration.
 	1,                          // The unique value for this configuration.
 	5,                          // The string identifier that describes this
@@ -259,6 +259,146 @@ __ALIGN_BEGIN uint8_t USBD_HID_CfgDesc[78] __ALIGN_END =
     7,                               // The size of the endpoint descriptor.
     USB_DESC_TYPE_ENDPOINT,              // Descriptor type is an endpoint.
     USB_EP_DESC_OUT | 0x03,
+    USB_EP_ATTR_BULK,                // Endpoint is a bulk endpoint.
+    USBShort(DATA_OUT_EP_MAX_SIZE),  // The maximum packet size.
+    0,                               // The polling interval for this endpoint.
+    //
+	// Vendor-specific Interface Descriptor.
+	//
+	9,								// Size of the interface descriptor.
+	4,			  // Type of this descriptor.
+	3,								// The index for this interface.
+	0,								// The alternate setting for this
+									// interface.
+	2,								// The number of endpoints used by this
+									// interface.
+	0xff,		 // The interface class
+	0,								// The interface sub-class.
+	0,								// The interface protocol for the sub-class
+									// specified above.
+	4,								// The string index for this interface.
+    
+    //
+    // Endpoint Descriptor
+    //
+    7,                              // The size of the endpoint descriptor.
+    USB_DESC_TYPE_ENDPOINT,             // Descriptor type is an endpoint.
+    USB_EP_DESC_IN | 0x04,
+    USB_EP_ATTR_BULK,               // Endpoint is a bulk endpoint.
+    USBShort(DATA_IN_EP_MAX_SIZE),  // The maximum packet size.
+    0,                              // The polling interval for this endpoint.
+
+    //
+    // Endpoint Descriptor
+    //
+    7,                               // The size of the endpoint descriptor.
+    USB_DESC_TYPE_ENDPOINT,              // Descriptor type is an endpoint.
+    USB_EP_DESC_OUT | 0x04,
+    USB_EP_ATTR_BULK,                // Endpoint is a bulk endpoint.
+    USBShort(DATA_OUT_EP_MAX_SIZE),  // The maximum packet size.
+    0,                               // The polling interval for this endpoint.
+    //
+	// Vendor-specific Interface Descriptor.
+	//
+	9,								// Size of the interface descriptor.
+	4,			  // Type of this descriptor.
+	4,								// The index for this interface.
+	0,								// The alternate setting for this
+									// interface.
+	2,								// The number of endpoints used by this
+									// interface.
+	0xff,		 // The interface class
+	0,								// The interface sub-class.
+	0,								// The interface protocol for the sub-class
+									// specified above.
+	4,								// The string index for this interface.
+    
+    //
+    // Endpoint Descriptor
+    //
+    7,                              // The size of the endpoint descriptor.
+    USB_DESC_TYPE_ENDPOINT,             // Descriptor type is an endpoint.
+    USB_EP_DESC_IN | 0x05,
+    USB_EP_ATTR_BULK,               // Endpoint is a bulk endpoint.
+    USBShort(DATA_IN_EP_MAX_SIZE),  // The maximum packet size.
+    0,                              // The polling interval for this endpoint.
+
+    //
+    // Endpoint Descriptor
+    //
+    7,                               // The size of the endpoint descriptor.
+    USB_DESC_TYPE_ENDPOINT,              // Descriptor type is an endpoint.
+    USB_EP_DESC_OUT | 0x05,
+    USB_EP_ATTR_BULK,                // Endpoint is a bulk endpoint.
+    USBShort(DATA_OUT_EP_MAX_SIZE),  // The maximum packet size.
+    0,                               // The polling interval for this endpoint.
+    //
+	// Vendor-specific Interface Descriptor.
+	//
+	9,								// Size of the interface descriptor.
+	4,			  // Type of this descriptor.
+	5,								// The index for this interface.
+	0,								// The alternate setting for this
+									// interface.
+	2,								// The number of endpoints used by this
+									// interface.
+	0xff,		 // The interface class
+	0,								// The interface sub-class.
+	0,								// The interface protocol for the sub-class
+									// specified above.
+	4,								// The string index for this interface.
+    
+    //
+    // Endpoint Descriptor
+    //
+    7,                              // The size of the endpoint descriptor.
+    USB_DESC_TYPE_ENDPOINT,             // Descriptor type is an endpoint.
+    USB_EP_DESC_IN | 0x06,
+    USB_EP_ATTR_BULK,               // Endpoint is a bulk endpoint.
+    USBShort(DATA_IN_EP_MAX_SIZE),  // The maximum packet size.
+    0,                              // The polling interval for this endpoint.
+
+    //
+    // Endpoint Descriptor
+    //
+    7,                               // The size of the endpoint descriptor.
+    USB_DESC_TYPE_ENDPOINT,              // Descriptor type is an endpoint.
+    USB_EP_DESC_OUT | 0x06,
+    USB_EP_ATTR_BULK,                // Endpoint is a bulk endpoint.
+    USBShort(DATA_OUT_EP_MAX_SIZE),  // The maximum packet size.
+    0,                               // The polling interval for this endpoint.
+    //
+	// Vendor-specific Interface Descriptor.
+	//
+	9,								// Size of the interface descriptor.
+	4,			  // Type of this descriptor.
+	6,								// The index for this interface.
+	0,								// The alternate setting for this
+									// interface.
+	2,								// The number of endpoints used by this
+									// interface.
+	0xff,		 // The interface class
+	0,								// The interface sub-class.
+	0,								// The interface protocol for the sub-class
+									// specified above.
+	4,								// The string index for this interface.
+    
+    //
+    // Endpoint Descriptor
+    //
+    7,                              // The size of the endpoint descriptor.
+    USB_DESC_TYPE_ENDPOINT,             // Descriptor type is an endpoint.
+    USB_EP_DESC_IN | 0x07,
+    USB_EP_ATTR_BULK,               // Endpoint is a bulk endpoint.
+    USBShort(DATA_IN_EP_MAX_SIZE),  // The maximum packet size.
+    0,                              // The polling interval for this endpoint.
+
+    //
+    // Endpoint Descriptor
+    //
+    7,                               // The size of the endpoint descriptor.
+    USB_DESC_TYPE_ENDPOINT,              // Descriptor type is an endpoint.
+    USB_EP_DESC_OUT | 0x07,
     USB_EP_ATTR_BULK,                // Endpoint is a bulk endpoint.
     USBShort(DATA_OUT_EP_MAX_SIZE),  // The maximum packet size.
     0,                               // The polling interval for this endpoint.
@@ -604,6 +744,7 @@ static uint8_t  USBD_HID_Init (USBD_HandleTypeDef *pdev,
   uint8_t ret = 0;
   
   /* Open EP IN */
+  
   USBD_LL_OpenEP(pdev,
                  0x81,
                  USBD_EP_TYPE_BULK,
