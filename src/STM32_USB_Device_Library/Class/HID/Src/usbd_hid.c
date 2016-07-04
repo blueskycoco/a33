@@ -783,7 +783,13 @@ static uint8_t  USBD_HID_Init (USBD_HandleTypeDef *pdev,
   }
   else
   {
-    ((USBD_HID_HandleTypeDef *)pdev->pClassData)->state = HID_IDLE;
+    ((USBD_HID_HandleTypeDef *)pdev->pClassData)->state[0] = HID_IDLE;
+	((USBD_HID_HandleTypeDef *)pdev->pClassData)->state[1] = HID_IDLE;
+	((USBD_HID_HandleTypeDef *)pdev->pClassData)->state[2] = HID_IDLE;
+	((USBD_HID_HandleTypeDef *)pdev->pClassData)->state[3] = HID_IDLE;
+	((USBD_HID_HandleTypeDef *)pdev->pClassData)->state[4] = HID_IDLE;
+	((USBD_HID_HandleTypeDef *)pdev->pClassData)->state[5] = HID_IDLE;
+	((USBD_HID_HandleTypeDef *)pdev->pClassData)->state[6] = HID_IDLE;
   }
   return ret;
 }
@@ -906,18 +912,21 @@ uint8_t USBD_HID_SendReport     (USBD_HandleTypeDef  *pdev,
                                  uint8_t *report,
                                  uint16_t len)
 {
-  //USBD_HID_HandleTypeDef     *hhid = (USBD_HID_HandleTypeDef*)pdev->pClassData;
+  USBD_HID_HandleTypeDef     *hhid = (USBD_HID_HandleTypeDef*)pdev->pClassData;
   
   if (pdev->dev_state == USBD_STATE_CONFIGURED )
   {
-    //if(hhid->state == HID_IDLE)
+  	while(hhid->state[addr-0x81] == HID_BUSY)
+    //if(hhid->state[addr-0x81] == HID_IDLE)
     //{
-     // hhid->state = HID_BUSY;
+      hhid->state[addr-0x81] = HID_BUSY;
       USBD_LL_Transmit (pdev, 
                         addr,                                      
                         report,
                         len);
     //}
+	//else
+	//	return USBD_BUSY;
   }
   return USBD_OK;
 }
@@ -977,7 +986,8 @@ static uint8_t  USBD_HID_DataIn (USBD_HandleTypeDef *pdev,
   
   /* Ensure that the FIFO is empty before a new transfer, this condition could 
   be caused by  a new transfer before the end of the previous transfer */
-  ((USBD_HID_HandleTypeDef *)pdev->pClassData)->state = HID_IDLE;
+  //printf("HID epnum %d IN\n",epnum);
+  ((USBD_HID_HandleTypeDef *)pdev->pClassData)->state[epnum-1] = HID_IDLE;
   return USBD_OK;
 }
 

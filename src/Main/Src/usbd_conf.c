@@ -237,16 +237,16 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
   HAL_PCDEx_PMAConfig(pdev->pData , 0x01 ,  PCD_SNG_BUF, 0x100);
   HAL_PCDEx_PMAConfig(pdev->pData , 0x82 ,  PCD_SNG_BUF, 0x140);
   HAL_PCDEx_PMAConfig(pdev->pData , 0x02 ,  PCD_SNG_BUF, 0x180);
-  HAL_PCDEx_PMAConfig(pdev->pData , 0x83 ,  PCD_SNG_BUF, 0x220);
-  HAL_PCDEx_PMAConfig(pdev->pData , 0x03 ,  PCD_SNG_BUF, 0x260);
-  HAL_PCDEx_PMAConfig(pdev->pData , 0x84 ,  PCD_SNG_BUF, 0x300);
-  HAL_PCDEx_PMAConfig(pdev->pData , 0x04 ,  PCD_SNG_BUF, 0x340);
-  HAL_PCDEx_PMAConfig(pdev->pData , 0x85 ,  PCD_SNG_BUF, 0x380);
-  HAL_PCDEx_PMAConfig(pdev->pData , 0x05 ,  PCD_SNG_BUF, 0x420);
-  HAL_PCDEx_PMAConfig(pdev->pData , 0x86 ,  PCD_SNG_BUF, 0x460);
-  HAL_PCDEx_PMAConfig(pdev->pData , 0x06 ,  PCD_SNG_BUF, 0x500);
-  HAL_PCDEx_PMAConfig(pdev->pData , 0x87 ,  PCD_SNG_BUF, 0x540);
-  HAL_PCDEx_PMAConfig(pdev->pData , 0x07 ,  PCD_SNG_BUF, 0x580);
+  HAL_PCDEx_PMAConfig(pdev->pData , 0x83 ,  PCD_SNG_BUF, 0x1c0);
+  HAL_PCDEx_PMAConfig(pdev->pData , 0x03 ,  PCD_SNG_BUF, 0x200);
+  HAL_PCDEx_PMAConfig(pdev->pData , 0x84 ,  PCD_SNG_BUF, 0x240);
+  HAL_PCDEx_PMAConfig(pdev->pData , 0x04 ,  PCD_SNG_BUF, 0x280);
+  HAL_PCDEx_PMAConfig(pdev->pData , 0x85 ,  PCD_SNG_BUF, 0x2c0);
+  HAL_PCDEx_PMAConfig(pdev->pData , 0x05 ,  PCD_SNG_BUF, 0x300);
+  HAL_PCDEx_PMAConfig(pdev->pData , 0x86 ,  PCD_SNG_BUF, 0x340);
+  HAL_PCDEx_PMAConfig(pdev->pData , 0x06 ,  PCD_SNG_BUF, 0x380);
+  HAL_PCDEx_PMAConfig(pdev->pData , 0x87 ,  PCD_SNG_BUF, 0x3c0);
+  HAL_PCDEx_PMAConfig(pdev->pData , 0x07 ,  PCD_SNG_BUF, 0x400);
   return USBD_OK;
 }
 

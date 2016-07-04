@@ -128,7 +128,6 @@ int main(void)
   printf("USB Init done\r\n");
   while (1)
   {
-  	//USBD_CDC_SetTxBuffer(&USBD_Device, (uint8_t*)&UserTxBuffer[0], 1024);
   	USBD_HID_SendReport(&USBD_Device,0x81,UserTxBuffer,1024);
 	USBD_HID_SendReport(&USBD_Device,0x82,UserTxBuffer,1024);
   	USBD_HID_SendReport(&USBD_Device,0x83,UserTxBuffer,1024);
