@@ -93,6 +93,7 @@ typedef struct
   uint32_t             IdleState;  
   uint32_t             AltSetting;
   HID_StateTypeDef     state[7];  
+  uint8_t  *RxBuffer[7];
 }
 USBD_HID_HandleTypeDef; 
 /**
@@ -128,6 +129,9 @@ uint8_t USBD_HID_SendReport (USBD_HandleTypeDef *pdev,
                                  uint16_t len);
 
 uint32_t USBD_HID_GetPollingInterval (USBD_HandleTypeDef *pdev);
+uint8_t  USBD_HID_SetRxBuffer  (USBD_HandleTypeDef   *pdev,
+                                   uint8_t  *pbuff,
+                                   uint8_t ep);
 
 /**
   * @}

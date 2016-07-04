@@ -54,6 +54,8 @@
 /* Private variables ---------------------------------------------------------*/
 USBD_HandleTypeDef USBD_Device;
 extern uint8_t UserTxBuffer[2048];
+uint8_t UserRxBuffer[7][64];
+
 /* Private function prototypes -----------------------------------------------*/
 static void SystemClock_Config(void);
 UART_HandleTypeDef UartHandle;
@@ -126,6 +128,9 @@ int main(void)
   USBD_Start(&USBD_Device);
   #endif
   printf("USB Init done\r\n");
+  //for(i=0;i<7;i++)
+  //USBD_HID_SetRxBuffer(&USBD_Device,(uint8_t*)UserRxBuffer[i],i);
+  i=0;
   while (1)
   {
   	USBD_HID_SendReport(&USBD_Device,0x81,UserTxBuffer,1024);

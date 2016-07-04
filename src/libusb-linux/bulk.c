@@ -58,6 +58,7 @@ void printf_bulk(int EP,int id)
 		//	printf("%c",rcvbuf[id][i]);
 		//printf("\n");
 		save_to_file(id,rcvbuf[id],size);
+		libusb_bulk_transfer(devh, EP-0x80, (unsigned char*)rcvbuf[id], 1024, &size, 5000);
 	}
 }
 int main(void)

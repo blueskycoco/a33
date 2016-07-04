@@ -106,6 +106,7 @@ static uint8_t  USBD_HID_Setup (USBD_HandleTypeDef *pdev,
 static uint8_t  *USBD_HID_GetCfgDesc (uint16_t *length);
 
 static uint8_t  *USBD_HID_GetDeviceQualifierDesc (uint16_t *length);
+static uint8_t  USBD_HID_DataOut (USBD_HandleTypeDef *pdev, uint8_t epnum);
 
 static uint8_t  USBD_HID_DataIn (USBD_HandleTypeDef *pdev, uint8_t epnum);
 /**
@@ -124,7 +125,7 @@ USBD_ClassTypeDef  USBD_HID =
   NULL, /*EP0_TxSent*/  
   NULL, /*EP0_RxReady*/
   USBD_HID_DataIn, /*DataIn*/
-  NULL, /*DataOut*/
+  USBD_HID_DataOut, /*DataOut*/
   NULL, /*SOF */
   NULL,
   NULL,      
@@ -991,6 +992,49 @@ static uint8_t  USBD_HID_DataIn (USBD_HandleTypeDef *pdev,
   return USBD_OK;
 }
 
+/**
+  * @brief  USBD_CDC_DataOut
+  *         Data received on non-control Out endpoint
+  * @param  pdev: device instance
+  * @param  epnum: endpoint number
+  * @retval status
+  */
+static uint8_t  USBD_HID_DataOut (USBD_HandleTypeDef *pdev, uint8_t epnum)
+{      
+  USBD_HID_HandleTypeDef   *hcdc = (USBD_HID_HandleTypeDef*) pdev->pClassData;
+  
+  /* Get the received data length */
+  int RxLength = USBD_LL_GetRxDataSize (pdev, epnum);
+  printf("%d Got %d bytes\n",epnum,RxLength);
+  /* USB data will be immediately processed, this allow next USB traffic being 
+  NAKed till the end of the application Xfer */
+  //if(pdev->pClassData != NULL)
+  //{
+    //((USBD_CDC_ItfTypeDef *)pdev->pUserData)->Receive(hcdc->RxBuffer, &hcdc->RxLength);
+
+   // return USBD_OK;
+  //}
+  //else
+  //{
+  //  return USBD_FAIL;
+ // }
+ USBD_LL_PrepareReceive(pdev,
+                             epnum,
+                             hcdc->RxBuffer[epnum-1],
+                             64);
+ return USBD_OK;
+}
+
+uint8_t  USBD_HID_SetRxBuffer  (USBD_HandleTypeDef   *pdev,
+                                   uint8_t  *pbuff,
+                                   uint8_t ep)
+{
+  USBD_HID_HandleTypeDef   *hcdc = (USBD_HID_HandleTypeDef*) pdev->pClassData;
+  
+  hcdc->RxBuffer[ep] = pbuff;
+  
+  return USBD_OK;
+}
 
 /**
 * @brief  DeviceQualifierDescriptor 
