@@ -1073,26 +1073,16 @@ static uint8_t  USBD_HID_DataIn (USBD_HandleTypeDef *pdev,
 static uint8_t  USBD_HID_DataOut (USBD_HandleTypeDef *pdev, uint8_t epnum)
 {      
   USBD_HID_HandleTypeDef   *hcdc = (USBD_HID_HandleTypeDef*) pdev->pClassData;
-  
+  #if 1
   /* Get the received data length */
   int RxLength = USBD_LL_GetRxDataSize (pdev, epnum);
   printf("\n%d Got %d bytes\n",epnum,RxLength);
-  /* USB data will be immediately processed, this allow next USB traffic being 
-  NAKed till the end of the application Xfer */
-  //if(pdev->pClassData != NULL)
-  //{
-    //((USBD_CDC_ItfTypeDef *)pdev->pUserData)->Receive(hcdc->RxBuffer, &hcdc->RxLength);
-
-   // return USBD_OK;
-  //}
-  //else
-  //{
-  //  return USBD_FAIL;
- // }
+  
    int i=0;
    for(i=0;i<RxLength;i++)
  	printf("%c",hcdc->RxBuffer[epnum-1][i]);
    printf("\r\n");
+   #endif
  USBD_LL_PrepareReceive(pdev,
                              epnum,
                              hcdc->RxBuffer[epnum-1],
