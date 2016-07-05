@@ -10,9 +10,10 @@
 //#define TEST_ASYNC
 
 // Device endpoint(s)
-#define EP_IN 0x81
-#define EP_OUT 0x01
-int intf=0;
+#define EP_IN 0x82
+#define EP_OUT 0x02
+int intf=1;
+int EP=0;
 // Device of bytes to transfer.
 #define BUF_SIZE 16384
 
@@ -126,8 +127,10 @@ int main(int argc, _TCHAR* argv[])
     usb_find_devices(); /* find all connected devices */
 	for(i=0;i<BUF_SIZE;i++)
 		tmp[i]=i;
-	//TcharToChar(argv[1],&index);
-	//i=atoi(index);
+	TcharToChar(argv[2],&index);
+	EP=atoi(index);
+	intf=EP-1;
+	printf("EP_IN %x,EP_OUT %x,intf %d\n",EP,EP+0x80,intf);
 	printf("open usb device \n");
 #if !W_OP
 	TcharToChar(argv[1],&file_out);
@@ -215,7 +218,7 @@ int main(int argc, _TCHAR* argv[])
 		{
 			//while(check_target_mem(dev)==0)
 			//	Sleep(1);
-			ret = usb_bulk_write(dev, EP_OUT, tmp, nBytes, 5000);
+			ret = usb_bulk_write(dev, EP, tmp, nBytes, 5000);
 			if (ret < 0)
 			{
 				printf("error writing:\n%s\n", usb_strerror());
@@ -232,13 +235,13 @@ int main(int argc, _TCHAR* argv[])
 #else
 		#ifdef TEST_ASYNC
 		// Running an async read test
-		ret = transfer_bulk_async(dev, EP_IN, tmp1, sizeof(tmp1), 5000);
+		ret = transfer_bulk_async(dev, EP+0x80, tmp1, sizeof(tmp1), 5000);
 		#else
-		ret = usb_bulk_read(dev, EP_IN, tmp1, sizeof(tmp1), 5000);
+		ret = usb_bulk_read(dev, EP+0x80, tmp1, sizeof(tmp1), 5000);
 		#endif
 		if (ret < 0)
 		{
-			printf("error reading:\nep_in=%x %d %s", EP_IN,bytes_r,usb_strerror());
+			printf("error reading:\nep_in=%x %d %s", EP+0x80,bytes_r,usb_strerror());
 			//printf("success: bulk read %d bytes\n", bytes_r);
 		}
 		else

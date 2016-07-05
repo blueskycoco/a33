@@ -53,8 +53,8 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 USBD_HandleTypeDef USBD_Device;
-extern uint8_t UserTxBuffer[2048];
-uint8_t UserRxBuffer[7][64];
+uint8_t UserTxBuffer[1024];
+//uint8_t UserRxBuffer[7][64];
 
 /* Private function prototypes -----------------------------------------------*/
 static void SystemClock_Config(void);
@@ -131,15 +131,16 @@ int main(void)
   //for(i=0;i<7;i++)
   //USBD_HID_SetRxBuffer(&USBD_Device,(uint8_t*)UserRxBuffer[i],i);
   i=0;
+  printf("USB Init done 2\r\n");
   while (1)
   {
-  	USBD_HID_SendReport(&USBD_Device,0x81,UserTxBuffer,1024);
-	USBD_HID_SendReport(&USBD_Device,0x82,UserTxBuffer,1024);
+  	USBD_HID_SendReport(&USBD_Device,0x87,UserTxBuffer,1024);
+	/*USBD_HID_SendReport(&USBD_Device,0x82,UserTxBuffer,1024);
   	USBD_HID_SendReport(&USBD_Device,0x83,UserTxBuffer,1024);
 	USBD_HID_SendReport(&USBD_Device,0x84,UserTxBuffer,1024);
 	USBD_HID_SendReport(&USBD_Device,0x85,UserTxBuffer,1024);
 	USBD_HID_SendReport(&USBD_Device,0x86,UserTxBuffer,1024);
-	USBD_HID_SendReport(&USBD_Device,0x87,UserTxBuffer,1024);
+	USBD_HID_SendReport(&USBD_Device,0x87,UserTxBuffer,1024);*/
 	i++;
   	memset(UserTxBuffer,0x30+i,1024);
 	HAL_Delay(100);  

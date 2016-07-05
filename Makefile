@@ -80,7 +80,7 @@ ${COMPILER}/net.axf: ${COMPILER}/stm32f3xx_it.o
 ${COMPILER}/net.axf: ${COMPILER}/usbd_conf.o
 #${COMPILER}/net.axf: ${COMPILER}/usbd_desc_cdc.o
 ${COMPILER}/net.axf: ${COMPILER}/usbd_desc_hid.o
-${COMPILER}/net.axf: ${COMPILER}/usbd_cdc_interface.o
+#${COMPILER}/net.axf: ${COMPILER}/usbd_cdc_interface.o
 ${COMPILER}/net.axf: ${COMPILER}/stm32f3xx_nucleo.o
 ${COMPILER}/net.axf: ${COMPILER}/system_stm32f3xx.o
 ${COMPILER}/net.axf: ${COMPILER}/stm32f3xx_hal.o

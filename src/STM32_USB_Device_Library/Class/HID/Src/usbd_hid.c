@@ -743,7 +743,6 @@ static uint8_t  USBD_HID_Init (USBD_HandleTypeDef *pdev,
                                uint8_t cfgidx)
 {
   uint8_t ret = 0;
-  
   /* Open EP IN */
   
   USBD_LL_OpenEP(pdev,
@@ -775,6 +774,36 @@ static uint8_t  USBD_HID_Init (USBD_HandleTypeDef *pdev,
                  0x87,
                  USBD_EP_TYPE_BULK,
                  64);  
+  USBD_LL_OpenEP(pdev,
+				   0x01,
+				   USBD_EP_TYPE_BULK,
+				   64);  
+	USBD_LL_OpenEP(pdev,
+				   0x02,
+				   USBD_EP_TYPE_BULK,
+				   64);
+
+	USBD_LL_OpenEP(pdev,
+				   0x03,
+				   USBD_EP_TYPE_BULK,
+				   64);  
+	USBD_LL_OpenEP(pdev,
+				   0x04,
+				   USBD_EP_TYPE_BULK,
+				   64);  
+	USBD_LL_OpenEP(pdev,
+				   0x05,
+				   USBD_EP_TYPE_BULK,
+				   64);  
+	USBD_LL_OpenEP(pdev,
+				   0x06,
+				   USBD_EP_TYPE_BULK,
+				   64);  
+	USBD_LL_OpenEP(pdev,
+				   0x07,
+				   USBD_EP_TYPE_BULK,
+				   64);  
+	
 
   pdev->pClassData = USBD_malloc(sizeof (USBD_HID_HandleTypeDef));
   
@@ -791,6 +820,36 @@ static uint8_t  USBD_HID_Init (USBD_HandleTypeDef *pdev,
 	((USBD_HID_HandleTypeDef *)pdev->pClassData)->state[4] = HID_IDLE;
 	((USBD_HID_HandleTypeDef *)pdev->pClassData)->state[5] = HID_IDLE;
 	((USBD_HID_HandleTypeDef *)pdev->pClassData)->state[6] = HID_IDLE;
+	
+  USBD_HID_HandleTypeDef   *hcdc = (USBD_HID_HandleTypeDef*) pdev->pClassData;
+	USBD_LL_PrepareReceive(pdev,
+	  							 0x01,
+	  							 hcdc->RxBuffer[0],
+	  							 64);
+	USBD_LL_PrepareReceive(pdev,
+								 0x02,
+								 hcdc->RxBuffer[1],
+								 64);
+	USBD_LL_PrepareReceive(pdev,
+								 0x03,
+								 hcdc->RxBuffer[2],
+								 64);
+	USBD_LL_PrepareReceive(pdev,
+								 0x04,
+								 hcdc->RxBuffer[3],
+								 64);
+	USBD_LL_PrepareReceive(pdev,
+								 0x05,
+								 hcdc->RxBuffer[4],
+								 64);
+	USBD_LL_PrepareReceive(pdev,
+								 0x06,
+								 hcdc->RxBuffer[5],
+								 64);
+	USBD_LL_PrepareReceive(pdev,
+								 0x07,
+								 hcdc->RxBuffer[6],
+								 64);
   }
   return ret;
 }
@@ -806,9 +865,20 @@ static uint8_t  USBD_HID_DeInit (USBD_HandleTypeDef *pdev,
                                  uint8_t cfgidx)
 {
   /* Close HID EPs */
-  USBD_LL_CloseEP(pdev,
-                  HID_EPIN_ADDR);
-  
+  USBD_LL_CloseEP(pdev,0x81);
+  USBD_LL_CloseEP(pdev,0x82);
+  USBD_LL_CloseEP(pdev,0x83);
+  USBD_LL_CloseEP(pdev,0x84);
+  USBD_LL_CloseEP(pdev,0x85);
+  USBD_LL_CloseEP(pdev,0x86);
+  USBD_LL_CloseEP(pdev,0x87);
+  USBD_LL_CloseEP(pdev,0x01);
+  USBD_LL_CloseEP(pdev,0x02);
+  USBD_LL_CloseEP(pdev,0x03);
+  USBD_LL_CloseEP(pdev,0x04);
+  USBD_LL_CloseEP(pdev,0x05);
+  USBD_LL_CloseEP(pdev,0x06);
+  USBD_LL_CloseEP(pdev,0x07);
   /* FRee allocated memory */
   if(pdev->pClassData != NULL)
   {
@@ -918,6 +988,7 @@ uint8_t USBD_HID_SendReport     (USBD_HandleTypeDef  *pdev,
   if (pdev->dev_state == USBD_STATE_CONFIGURED )
   {
   	while(hhid->state[addr-0x81] == HID_BUSY)
+		HAL_Delay(1);
     //if(hhid->state[addr-0x81] == HID_IDLE)
     //{
       hhid->state[addr-0x81] = HID_BUSY;
@@ -1005,7 +1076,7 @@ static uint8_t  USBD_HID_DataOut (USBD_HandleTypeDef *pdev, uint8_t epnum)
   
   /* Get the received data length */
   int RxLength = USBD_LL_GetRxDataSize (pdev, epnum);
-  printf("%d Got %d bytes\n",epnum,RxLength);
+  printf("\n%d Got %d bytes\n",epnum,RxLength);
   /* USB data will be immediately processed, this allow next USB traffic being 
   NAKed till the end of the application Xfer */
   //if(pdev->pClassData != NULL)
@@ -1018,22 +1089,15 @@ static uint8_t  USBD_HID_DataOut (USBD_HandleTypeDef *pdev, uint8_t epnum)
   //{
   //  return USBD_FAIL;
  // }
+   int i=0;
+   for(i=0;i<RxLength;i++)
+ 	printf("%c",hcdc->RxBuffer[epnum-1][i]);
+   printf("\r\n");
  USBD_LL_PrepareReceive(pdev,
                              epnum,
                              hcdc->RxBuffer[epnum-1],
                              64);
  return USBD_OK;
-}
-
-uint8_t  USBD_HID_SetRxBuffer  (USBD_HandleTypeDef   *pdev,
-                                   uint8_t  *pbuff,
-                                   uint8_t ep)
-{
-  USBD_HID_HandleTypeDef   *hcdc = (USBD_HID_HandleTypeDef*) pdev->pClassData;
-  
-  hcdc->RxBuffer[ep] = pbuff;
-  
-  return USBD_OK;
 }
 
 /**
