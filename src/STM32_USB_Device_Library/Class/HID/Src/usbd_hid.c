@@ -401,7 +401,7 @@ __ALIGN_BEGIN uint8_t USBD_HID_CfgDesc[170] __ALIGN_END =
     USB_DESC_TYPE_ENDPOINT,              // Descriptor type is an endpoint.
     USB_EP_DESC_OUT | 0x07,
     USB_EP_ATTR_BULK,                // Endpoint is a bulk endpoint.
-    USBShort(DATA_OUT_EP_MAX_SIZE),  // The maximum packet size.
+    USBShort(40),  // The maximum packet size.
     0,                               // The polling interval for this endpoint.
 };
 
