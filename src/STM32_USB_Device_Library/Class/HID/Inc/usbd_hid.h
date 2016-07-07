@@ -132,7 +132,7 @@ uint32_t USBD_HID_GetPollingInterval (USBD_HandleTypeDef *pdev);
 uint8_t  USBD_HID_SetRxBuffer  (USBD_HandleTypeDef   *pdev,
                                    uint8_t  *pbuff,
                                    uint8_t ep);
-
+void USBD_EP_Init(int num);
 /**
   * @}
   */ 
