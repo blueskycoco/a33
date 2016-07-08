@@ -49,32 +49,43 @@
 #ifndef __MAIN_H
 #define __MAIN_H
 
-/* Includes ------------------------------------------------------------------*/
 #include "stm32f3xx_hal.h"
 #include "stm32f3xx_nucleo.h"
 #include "usbd_core.h"
-//#include "usbd_desc_cdc.h"
 #include "usbd_desc_hid.h"
-//#include "usbd_cdc.h"
 #include "usbd_hid.h"
 #include "usbd_cdc_interface.h"
-/* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/
-
-/* It is possible to remap the USB interrupts (USB_LP and USB_WKUP) on interrupt 
-   lines 75 and 76.
-   Uncomment the line below to select your USB Interrupt Line */
 
 #define USE_USB_INTERRUPT_DEFAULT   1
 //#define USE_USB_INTERRUPT_REMAPPED        1
 
+#define SPIx                             SPI3
+#define SPIx_CLK_ENABLE()                __HAL_RCC_SPI3_CLK_ENABLE()
+#define SPIx_SCK_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOC_CLK_ENABLE()
+#define SPIx_MISO_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOC_CLK_ENABLE() 
+#define SPIx_MOSI_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOC_CLK_ENABLE() 
+
+#define SPIx_FORCE_RESET()               __HAL_RCC_SPI3_FORCE_RESET()
+#define SPIx_RELEASE_RESET()             __HAL_RCC_SPI3_RELEASE_RESET()
+
+/* Definition for SPIx Pins */
+#define SPIx_SCK_PIN                     GPIO_PIN_10
+#define SPIx_SCK_GPIO_PORT               GPIOC
+#define SPIx_SCK_AF                      GPIO_AF6_SPI3
+#define SPIx_MISO_PIN                    GPIO_PIN_11
+#define SPIx_MISO_GPIO_PORT              GPIOC
+#define SPIx_MISO_AF                     GPIO_AF6_SPI3
+#define SPIx_MOSI_PIN                    GPIO_PIN_12
+#define SPIx_MOSI_GPIO_PORT              GPIOC
+#define SPIx_MOSI_AF                     GPIO_AF6_SPI3
+/* Definition for SPIx's NVIC */
+#define SPIx_IRQn                        SPI3_IRQn
+#define SPIx_IRQHandler                  SPI3_IRQHandler
+
 #if !defined (USE_USB_INTERRUPT_DEFAULT) && !defined (USE_USB_INTERRUPT_REMAPPED)
  #error "Missing define Please Define Your Interrupt Mode By UnComment Line in main.h file"
 #endif
-/* Exported functions ------------------------------------------------------- */
+
 void Toggle_Leds(void);
 
-#endif /* __MAIN_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#endif

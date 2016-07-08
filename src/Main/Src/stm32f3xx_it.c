@@ -49,9 +49,9 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-extern PCD_HandleTypeDef hpcd;
-extern USBD_HandleTypeDef USBD_Device;
 extern UART_HandleTypeDef UartHandle;
+extern UART_HandleTypeDef CmdHandle;
+extern SPI_HandleTypeDef SpiHandle;
 
 /******************************************************************************/
 /*             Cortex-M4 Processor Exceptions Handlers                         */
@@ -156,47 +156,18 @@ void SysTick_Handler(void)
   Toggle_Leds();
 }
 
-/******************************************************************************/
-/*                 STM32F3xx Peripherals Interrupt Handlers                        */
-/*  Add here the Interrupt Handler for the used peripheral(s) (PPP), for the  */
-/*  available peripheral interrupt handler's name please refer to the startup */
-/*  file (startup_stm32f3xx.s).                                               */
-/******************************************************************************/
-
-/**
-  * @brief  This function handles USB Handler.
-  * @param  None
-  * @retval None
-  */
-#if defined (USE_USB_INTERRUPT_DEFAULT)
-void USB_LP_CAN_RX0_IRQHandler(void)
-#elif defined (USE_USB_INTERRUPT_REMAPPED)
-void USB_LP_IRQHandler(void)
-#endif
-{
-	//printf("enter USB_LP_CAN_RX0_IRQHandler\n");
-  HAL_PCD_IRQHandler(&hpcd);
-}
-
-/**
-  * @brief  This function handles USB WakeUp interrupt request.
-  * @param  None
-  * @retval None
-  */
-#if defined (USE_USB_INTERRUPT_DEFAULT)
-void USBWakeUp_IRQHandler(void)
-#elif defined (USE_USB_INTERRUPT_REMAPPED)
-void USBWakeUp_RMP_IRQHandler(void)
-#endif
-{
-	//printf("enter USBWakeUp_IRQHandler\r\n");
-  __HAL_USB_WAKEUP_EXTI_CLEAR_FLAG();
-}
-
-
 void USARTx_IRQHandler(void)
 {
   HAL_UART_IRQHandler(&UartHandle);
+}
+void USART1_IRQHandler(void)
+{
+  HAL_UART_IRQHandler(&CmdHandle);
+}
+
+void SPIx_IRQHandler(void)
+{
+  HAL_SPI_IRQHandler(&SpiHandle);
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

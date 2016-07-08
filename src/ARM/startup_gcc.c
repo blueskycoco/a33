@@ -50,6 +50,8 @@ extern void SysTick_Handler(void);
 extern void USBWakeUp_IRQHandler(void);
 extern void USB_LP_CAN_RX0_IRQHandler(void);
 extern void USARTx_IRQHandler(void);
+extern void SPI3_IRQHandler(void);
+
 //*****************************************************************************
 //
 // The entry point for the application.
@@ -110,7 +112,7 @@ void (* const g_pfnVectors[])(void) =
 	IntDefaultHandler, //	DMA1_Channel7_IRQHandler
 	IntDefaultHandler, //	ADC1_IRQHandler
 	IntDefaultHandler, //	USB_HP_CAN_TX_IRQHandler
-	USB_LP_CAN_RX0_IRQHandler, //	USB_LP_CAN_RX0_IRQHandler
+	IntDefaultHandler, //	USB_LP_CAN_RX0_IRQHandler
 	IntDefaultHandler, //	CAN_RX1_IRQHandler
 	IntDefaultHandler, //	CAN_SCE_IRQHandler
 	IntDefaultHandler, //	EXTI9_5_IRQHandler
@@ -141,7 +143,7 @@ void (* const g_pfnVectors[])(void) =
 	0, //	0
 	0, //	0
 	0, //	0
-	IntDefaultHandler, //	SPI3_IRQHandler
+	SPI3_IRQHandler, //	SPI3_IRQHandler
 	0, //	0
 	0, //	0
 	IntDefaultHandler, //	TIM6_DAC_IRQHandler
