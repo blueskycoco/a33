@@ -839,7 +839,7 @@ static uint8_t  USBD_HID_DataIn (USBD_HandleTypeDef *pdev,
 static uint8_t  USBD_HID_DataOut (USBD_HandleTypeDef *pdev, uint8_t epnum)
 {      
   USBD_HID_HandleTypeDef   *hcdc = (USBD_HID_HandleTypeDef*) pdev->pClassData;
-  #if 1
+  #if 0
   /* Get the received data length */
   int RxLength = USBD_LL_GetRxDataSize (pdev, epnum);
   printf("\n%d Got %d bytes\n",epnum,RxLength);

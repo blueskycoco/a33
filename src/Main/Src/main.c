@@ -136,15 +136,15 @@ int main(void)
   while (1)
   {
   	USBD_HID_SendReport(&USBD_Device,0x81,UserTxBuffer,1024);
-	/*USBD_HID_SendReport(&USBD_Device,0x82,UserTxBuffer,1024);
+	USBD_HID_SendReport(&USBD_Device,0x82,UserTxBuffer,1024);
   	USBD_HID_SendReport(&USBD_Device,0x83,UserTxBuffer,1024);
 	USBD_HID_SendReport(&USBD_Device,0x84,UserTxBuffer,1024);
 	USBD_HID_SendReport(&USBD_Device,0x85,UserTxBuffer,1024);
 	USBD_HID_SendReport(&USBD_Device,0x86,UserTxBuffer,1024);
-	USBD_HID_SendReport(&USBD_Device,0x87,UserTxBuffer,1024);*/
+	USBD_HID_SendReport(&USBD_Device,0x87,UserTxBuffer,1024);
 	i++;
   	memset(UserTxBuffer,0x30+i,1024);
-	HAL_Delay(100);  
+	HAL_Delay(1000);  
   }
 }
 
