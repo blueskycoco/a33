@@ -51,6 +51,7 @@ extern void USBWakeUp_IRQHandler(void);
 extern void USB_LP_CAN_RX0_IRQHandler(void);
 extern void USARTx_IRQHandler(void);
 extern void SPI3_IRQHandler(void);
+extern void USART1_IRQHandler(void);
 
 //*****************************************************************************
 //
@@ -129,7 +130,7 @@ void (* const g_pfnVectors[])(void) =
 	IntDefaultHandler, //	I2C2_ER_IRQHandler
 	0, //	0
 	IntDefaultHandler, //	SPI2_IRQHandler
-	IntDefaultHandler, //	USART1_IRQHandler
+	USART1_IRQHandler, //	USART1_IRQHandler
 	USARTx_IRQHandler, //	USART2_IRQHandler
 	IntDefaultHandler, //	USART3_IRQHandler
 	IntDefaultHandler, //	EXTI15_10_IRQHandler

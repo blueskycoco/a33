@@ -5,10 +5,10 @@ __IO ITStatus SpiReady = RESET;
 __IO ITStatus UartReady = RESET;
 
 uint8_t aRxBuffer[7];
-uint8_t aTxBuffer[] = "****SPI - Two Boards communication based on Interrupt **** SPI Message ******** SPI Message ******** SPI Message ****";
+uint8_t aTxBuffer[2068]={0};// = "****SPI - Two Boards communication based on Interrupt **** SPI Message ******** SPI Message ******** SPI Message ****";
 #define COUNTOF(__BUFFER__)   (sizeof(__BUFFER__) / sizeof(*(__BUFFER__)))
 #define BUFFERSIZE                       (COUNTOF(aTxBuffer) - 1)
-
+uint8_t spi_data=0;
 static void SystemClock_Config(void);
 UART_HandleTypeDef UartHandle;
 UART_HandleTypeDef CmdHandle;
@@ -27,12 +27,20 @@ int uart_read()
 void send_spi()
 {
 	SpiReady=RESET;
-	HAL_SPI_Transmit_IT(&SpiHandle, (uint8_t*)aTxBuffer, BUFFERSIZE);
+	printf("spi_data %d \n",spi_data);
+	memset(aTxBuffer,spi_data,2068);
+	spi_data++;
+	HAL_SPI_Transmit_IT(&SpiHandle, (uint8_t*)aTxBuffer, 2068);
 	while(!SpiReady);
 }
 void HandleCmd(uint8_t *cmd)
 {
 	int crc=0;
+	int i;
+	printf("HandleCmd\n");
+	for(i=0;i<7;i++)
+		printf("%2X ",cmd[i]);
+	printf("\n");
 	if(cmd[0]==0xaa && cmd[6]==0x0d)
 	{
 		crc=cmd[0]+cmd[1]+cmd[2]+cmd[3]*256;
@@ -113,8 +121,8 @@ int main(void)
 	SpiHandle.Instance               = SPIx;
 	SpiHandle.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
 	SpiHandle.Init.Direction         = SPI_DIRECTION_2LINES;
-	SpiHandle.Init.CLKPhase          = SPI_PHASE_1EDGE;
-	SpiHandle.Init.CLKPolarity       = SPI_POLARITY_LOW;
+	SpiHandle.Init.CLKPhase          = SPI_PHASE_2EDGE;
+	SpiHandle.Init.CLKPolarity       = SPI_POLARITY_HIGH;
 	SpiHandle.Init.CRCCalculation    = SPI_CRCCALCULATION_DISABLE;
 	SpiHandle.Init.CRCPolynomial     = 7;
 	SpiHandle.Init.DataSize          = SPI_DATASIZE_8BIT;
@@ -125,9 +133,9 @@ int main(void)
 	SpiHandle.Init.CRCLength         = SPI_CRC_LENGTH_8BIT;
 	SpiHandle.Init.Mode 			 = SPI_MODE_SLAVE;
 	HAL_SPI_Init(&SpiHandle);
-	printf("STM32F302R8T6 Init\r\n");
+	printf("STM32F302R8T6 A20 Init\r\n");
 	HAL_UART_Receive_IT(&CmdHandle, (uint8_t *)aRxBuffer, 7);
-	while (1);
+	while (1)
 	{
 		if(UartReady)
 		{
